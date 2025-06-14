@@ -8,7 +8,7 @@ import { IProduct } from './product.interface';
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly url = `${environment.apiUrl.backendUrl}/products`;
+  private readonly url = `/api/products`;
 
   constructor(private readonly _httpClient: HttpClient) {}
 

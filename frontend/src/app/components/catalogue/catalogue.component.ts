@@ -7,17 +7,21 @@ import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-catalogue',
   standalone: true,
-  imports: [DataViewModule, Tag, ButtonModule, CommonModule, SelectButtonModule, FormsModule],
+  imports: [DataViewModule, Tag, ButtonModule, CommonModule, SelectButtonModule, FormsModule, ProductDetailComponent, DialogModule],
   templateUrl: './catalogue.component.html',
   styleUrl: './catalogue.component.scss'
 })
 export class CatalogueComponent implements OnInit {
 
   products: IProduct[] = [];
+  selectedProduct: IProduct | null = null;
+  displayDialog: boolean = false;
 
   constructor(private productService: ProductService){}
 
@@ -25,7 +29,6 @@ export class CatalogueComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products = products;
-        console.log(this.products)
       },
       error: (err) => {
         console.error('Erreur lors du chargement des produits :', err);
@@ -33,7 +36,7 @@ export class CatalogueComponent implements OnInit {
     });
   }
 
-  getSeverity(product: IProduct): string {
+   getSeverity(product: IProduct): string {
     switch (product.stock) {
       case 0:
         return 'danger';
@@ -42,5 +45,16 @@ export class CatalogueComponent implements OnInit {
       default:
         return 'success';
     }
+  }
+
+  viewDetail(product: IProduct): void {
+    console.log(product)
+  this.selectedProduct = product;
+  this.displayDialog = true;
+  }
+
+  onHide(){
+    this.selectedProduct = null;
+    this.displayDialog = false
   }
 }

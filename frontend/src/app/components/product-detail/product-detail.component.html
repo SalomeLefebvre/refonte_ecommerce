@@ -1,1 +1,12 @@
-<p>COUCOU</p>
+<div class="product-detail">
+  <h2>{{ product.name }}</h2>
+  
+  <div class="product-images">
+    <img *ngFor="let img of product.images" [src]="img" alt="Image de {{ product.name }}" class="product-image" />
+  </div>
+
+  <p class="description">{{ product.description_long }}</p>
+  <p class="price">{{ product.price | currency:product.currency }}</p>
+
+    <button (click)="addToCart()">Ajouter au panier</button>
+</div>

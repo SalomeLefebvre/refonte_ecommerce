@@ -11,4 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductDetailComponent {
   @Input() product!: IProduct;
-}
+
+  addToCart() {
+    }
+} 

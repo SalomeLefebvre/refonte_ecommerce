@@ -4,7 +4,7 @@ import { AddressEntity } from "../entities/address.entity";
 
 @Injectable()
 export class AddressRepository {
-      private readonly _repository;
+  private readonly _repository;
 
   constructor(private readonly _dataSource: DataSource) {
     this._repository = this._dataSource.getTreeRepository(AddressEntity);
@@ -17,6 +17,13 @@ export class AddressRepository {
     });
   }
 
+  async findAddressByCustomer(idCustomer: string): Promise<AddressEntity[]> {
+    return this._repository.find({
+      where: { customer: { id: idCustomer } },
+      relations: ["customer"],
+  });
+  }
+
   async saveAddress(address: DeepPartial<AddressEntity>) {
   const addressData = this._repository.create(address);
   return this._repository.save(addressData);
@@ -25,5 +32,4 @@ export class AddressRepository {
   async deleteAddressById(id: string): Promise<void> {
     await this._repository.delete(id);
   }
-
 }

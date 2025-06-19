@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { CustomerEntity } from "src/customer/entities/customer.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("address")
 export class AddressEntity {
@@ -20,13 +21,7 @@ export class AddressEntity {
   @Column()
     addressType: string;
 
-  @Column({ unique: true })
-    email: string;
-
-  @Column({ nullable: true })
-    avatar: string;
-
-  @Column({ default: false })
-    disabled: boolean;
+  @ManyToOne(() => CustomerEntity, customer => customer.addresses)
+  customer: CustomerEntity; 
 }
 

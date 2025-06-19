@@ -3,6 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { OrderEntity } from './order/entities/order.entity';
+import { CustomerEntity } from './customer/entities/customer.entity';
+import { OrderItemEntity } from './order-item/entities/order-item.entity';
+import { AddressEntity } from './address/entities/address.entity';
 
 
 @Module({
@@ -17,7 +21,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       username: "user",
       password: "password",
       database: "e-commerce",
-      entities: [],
+      entities: [OrderEntity, CustomerEntity, OrderItemEntity, AddressEntity],
       autoLoadEntities: true,
     })],
   controllers: [AppController],

@@ -7,9 +7,10 @@ import { OrderRepository } from "./repositories/order.repository";
 import { OrderController } from "./order.controller";
 import { CustomerEntity } from "src/customer/entities/customer.entity";
 import { OrderItemEntity } from "src/order-item/entities/order-item.entity";
+import { AddressEntity } from "src/address/entities/address.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderEntity, CustomerEntity, OrderItemEntity])],
+  imports: [TypeOrmModule.forFeature([OrderEntity, CustomerEntity, OrderItemEntity, AddressEntity])],
   controllers: [OrderController],
   providers: [ OrderService,
     {

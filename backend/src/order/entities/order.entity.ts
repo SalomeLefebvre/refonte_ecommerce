@@ -1,6 +1,7 @@
+import { AddressEntity } from "src/address/entities/address.entity";
 import { CustomerEntity } from "src/customer/entities/customer.entity";
 import { OrderItemEntity } from "src/order-item/entities/order-item.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("order")
 export class OrderEntity {
@@ -21,6 +22,14 @@ export class OrderEntity {
 
   @Column({ type: "decimal" })
     orderTotal: string;
+  
+  @ManyToOne(() => AddressEntity)
+  @JoinColumn({ name: "shippingAddressId" })
+  shippingAddress: AddressEntity;
+
+  @ManyToOne(() => AddressEntity)
+  @JoinColumn({ name: "billingAddressId" })
+  billingAddress: AddressEntity;
   
   @ManyToOne(() => CustomerEntity, customer => customer.orders)
   customer: CustomerEntity;

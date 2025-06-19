@@ -1,13 +1,29 @@
 import { Injectable } from "@nestjs/common";
-import { DataSource } from "typeorm";
+import { DataSource, DeepPartial } from "typeorm";
 import { AddressEntity } from "../entities/address.entity";
 
 @Injectable()
 export class AddressRepository {
-      private readonly _treeRepo;
+      private readonly _repository;
 
   constructor(private readonly _dataSource: DataSource) {
-    this._treeRepo = this._dataSource.getTreeRepository(AddressEntity);
+    this._repository = this._dataSource.getTreeRepository(AddressEntity);
+  }
+
+  async findAddressById(addressId: string): Promise<AddressEntity | null> {
+    return this._repository.findOne({
+      where: { id: addressId },
+      relations: ["customer"],
+    });
+  }
+
+  async saveAddress(address: DeepPartial<AddressEntity>) {
+  const addressData = this._repository.create(address);
+  return this._repository.save(addressData);
+  }
+
+  async deleteAddressById(id: string): Promise<void> {
+    await this._repository.delete(id);
   }
 
 }

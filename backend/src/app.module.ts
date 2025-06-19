@@ -23,6 +23,7 @@ import { AddressEntity } from './address/entities/address.entity';
       database: "e-commerce",
       entities: [OrderEntity, CustomerEntity, OrderItemEntity, AddressEntity],
       autoLoadEntities: true,
+      synchronize: true
     })],
   controllers: [AppController],
   providers: [AppService],

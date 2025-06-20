@@ -10,7 +10,8 @@ import { CustomerEntity } from "src/customer/entities/customer.entity";
 @Module({
   imports: [TypeOrmModule.forFeature([AddressEntity, CustomerEntity])],
   controllers: [AddressController],
-  providers: [ AddressService,
+  providers: [
+    AddressService,
     {
       provide: AddressRepository,
       useFactory: (dataSource: DataSource) => new AddressRepository(dataSource),
@@ -20,4 +21,3 @@ import { CustomerEntity } from "src/customer/entities/customer.entity";
   exports: [AddressService],
 })
 export class AddressModule {}
-

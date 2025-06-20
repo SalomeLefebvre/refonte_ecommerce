@@ -5,6 +5,8 @@ import { AddressRepository } from "./repositories/address.repository";
 import { AddressEntity } from "./entities/address.entity";
 import { CustomerRepository } from "src/customer/repositories/customer.repository";
 import { CustomerEntity } from "src/customer/entities/customer.entity";
+import { UpdateAddressDto } from "./dtos/update-address.dto";
+import { AddressDto } from "./dtos/address.dto";
 
 describe("AddressService", () => {
   let service: AddressService;
@@ -79,7 +81,9 @@ describe("AddressService", () => {
     it("should throw NotFoundException when address is not found", async () => {
       addressRepository.findAddressById.mockResolvedValue(null);
 
-      await expect(service.getAddressById("999")).rejects.toThrow(NotFoundException);
+      await expect(service.getAddressById("999")).rejects.toThrow(
+        NotFoundException,
+      );
       expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
     });
   });
@@ -96,13 +100,17 @@ describe("AddressService", () => {
     });
 
     it("should throw ForbiddenException when id is missing", async () => {
-      await expect(service.deleteAddressById("")).rejects.toThrow(ForbiddenException);
+      await expect(service.deleteAddressById("")).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it("should throw NotFoundException when user shortcut is not found", async () => {
       addressRepository.findAddressById.mockResolvedValue(null);
 
-      await expect(service.deleteAddressById("999")).rejects.toThrow(NotFoundException);
+      await expect(service.deleteAddressById("999")).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -117,20 +125,24 @@ describe("AddressService", () => {
         ...updates,
       } as AddressEntity);
 
-      const result = await service.updateAddress("1", updates as any);
+      const result = await service.updateAddress("1", updates as UpdateAddressDto);
 
       expect(result.city).toEqual("New York");
       expect(addressRepository.saveAddress).toHaveBeenCalled();
     });
 
     it("should throw ForbiddenException when id is missing", async () => {
-      await expect(service.updateAddress("", {} as any)).rejects.toThrow(ForbiddenException);
+      await expect(service.updateAddress("", {} as UpdateAddressDto)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it("should throw NotFoundException when user shortcut is not found", async () => {
       addressRepository.findAddressById.mockResolvedValue(null);
 
-      await expect(service.updateAddress("999", {} as any)).rejects.toThrow(NotFoundException);
+      await expect(service.updateAddress("999", {} as UpdateAddressDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -143,12 +155,16 @@ describe("AddressService", () => {
         zipCode: "44400",
         country: "France",
         addressType: "Shipping",
-        userId: "1",
+        customerId: "1",
       };
-      customerRepository.findCustomerById.mockResolvedValue(mockCustomer as CustomerEntity);
-      addressRepository.saveAddress.mockResolvedValue(mockAddress as AddressEntity);
+      customerRepository.findCustomerById.mockResolvedValue(
+        mockCustomer as CustomerEntity,
+      );
+      addressRepository.saveAddress.mockResolvedValue(
+        mockAddress as AddressEntity,
+      );
 
-      const result = await service.createAddress(dto as any);
+      const result = await service.createAddress(dto as AddressDto);
 
       expect(result).toEqual(mockAddress);
       expect(addressRepository.saveAddress).toHaveBeenCalled();
@@ -162,12 +178,13 @@ describe("AddressService", () => {
         zipCode: "44400",
         country: "France",
         addressType: "Shipping",
-        userId: "1",
+        customerId: "1",
       };
       customerRepository.findCustomerById.mockResolvedValue(null);
 
-      await expect(service.createAddress(dto as any)).rejects.toThrow(ForbiddenException);
+      await expect(service.createAddress(dto as AddressDto)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 });
-

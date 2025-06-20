@@ -3,21 +3,21 @@ import { IsOptional, IsString } from "class-validator";
 export class UpdateAddressDto {
   @IsOptional()
   @IsString()
-  street?: string;
+    street?: string;
 
   @IsOptional()
   @IsString()
-  city?: string;
+    city?: string;
 
   @IsOptional()
   @IsString()
-  zipCode?: string;
+    zipCode?: string;
 
   @IsOptional()
   @IsString()
-  country?: string;
+    country?: string;
 
   @IsOptional()
   @IsString()
-  addressType?: string;
+    addressType?: string;
 }

@@ -2,23 +2,23 @@ import { IsString, IsUUID } from "class-validator";
 
 export class AddressDto {
   @IsUUID()
-  id: string;
+    id: string;
 
   @IsString()
-  street: string;
+    street: string;
 
   @IsString()
-  city: string;
+    city: string;
 
   @IsString()
-  zipCode: string;
+    zipCode: string;
 
   @IsString()
-  country: string;
+    country: string;
 
   @IsString()
-  addressType: string;
+    addressType: string;
 
   @IsString()
-  customerId: string;
+    customerId: string;
 }

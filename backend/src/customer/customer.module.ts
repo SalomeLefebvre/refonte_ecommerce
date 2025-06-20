@@ -9,12 +9,16 @@ import { AddressEntity } from "src/address/entities/address.entity";
 import { OrderEntity } from "src/order/entities/order.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CustomerEntity, AddressEntity, OrderEntity])],
+  imports: [
+    TypeOrmModule.forFeature([CustomerEntity, AddressEntity, OrderEntity]),
+  ],
   controllers: [CustomerController],
-  providers: [ CustomerService,
+  providers: [
+    CustomerService,
     {
       provide: CustomerRepository,
-      useFactory: (dataSource: DataSource) => new CustomerRepository(dataSource),
+      useFactory: (dataSource: DataSource) =>
+        new CustomerRepository(dataSource),
       inject: [DataSource],
     },
   ],

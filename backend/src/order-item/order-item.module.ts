@@ -10,10 +10,12 @@ import { OrderEntity } from "src/order/entities/order.entity";
 @Module({
   imports: [TypeOrmModule.forFeature([OrderItemEntity, OrderEntity])],
   controllers: [OrderItemController],
-  providers: [ OrderItemService,
+  providers: [
+    OrderItemService,
     {
       provide: OrderItemRepository,
-      useFactory: (dataSource: DataSource) => new OrderItemRepository(dataSource),
+      useFactory: (dataSource: DataSource) =>
+        new OrderItemRepository(dataSource),
       inject: [DataSource],
     },
   ],

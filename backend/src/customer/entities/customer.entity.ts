@@ -1,6 +1,13 @@
 import { AddressEntity } from "src/address/entities/address.entity";
 import { OrderEntity } from "src/order/entities/order.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity("customer")
 export class CustomerEntity {
@@ -15,15 +22,15 @@ export class CustomerEntity {
 
   @OneToOne(() => AddressEntity)
   @JoinColumn({ name: "defaultShippingAddressId" })
-  defaultShippingAddress: AddressEntity;
+    defaultShippingAddress: AddressEntity;
 
   @OneToOne(() => AddressEntity)
   @JoinColumn({ name: "defaultBillingAddressId" })
-  defaultBillingAddress: AddressEntity
+    defaultBillingAddress: AddressEntity;
 
-  @OneToMany(() => OrderEntity, order => order.customer)
-  orders: OrderEntity[];
+  @OneToMany(() => OrderEntity, (order) => order.customer)
+    orders: OrderEntity[];
 
-  @OneToMany(() => AddressEntity, address => address.customer)
-  addresses: AddressEntity[];
+  @OneToMany(() => AddressEntity, (address) => address.customer)
+    addresses: AddressEntity[];
 }

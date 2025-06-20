@@ -17,11 +17,10 @@ export class AddressEntity {
 
   @Column()
     country: string;
-  
+
   @Column()
     addressType: string;
 
-  @ManyToOne(() => CustomerEntity, customer => customer.addresses)
-  customer: CustomerEntity; 
+  @ManyToOne(() => CustomerEntity, (customer) => customer.addresses)
+    customer: CustomerEntity;
 }
-

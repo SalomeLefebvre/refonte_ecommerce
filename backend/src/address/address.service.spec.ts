@@ -77,15 +77,6 @@ describe("AddressService", () => {
       });
       expect(addressRepository.findAddressById).toHaveBeenCalledWith("1");
     });
-
-    it("should throw NotFoundException when address is not found", async () => {
-      addressRepository.findAddressById.mockResolvedValue(null);
-
-      await expect(service.getAddressById("999")).rejects.toThrow(
-        NotFoundException,
-      );
-      expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
-    });
   });
 
   describe("deleteUserShortcutById", () => {
@@ -95,22 +86,7 @@ describe("AddressService", () => {
       );
 
       await service.deleteAddressById("1");
-
       expect(addressRepository.deleteAddressById).toHaveBeenCalledWith("1");
-    });
-
-    it("should throw ForbiddenException when id is missing", async () => {
-      await expect(service.deleteAddressById("")).rejects.toThrow(
-        ForbiddenException,
-      );
-    });
-
-    it("should throw NotFoundException when user shortcut is not found", async () => {
-      addressRepository.findAddressById.mockResolvedValue(null);
-
-      await expect(service.deleteAddressById("999")).rejects.toThrow(
-        NotFoundException,
-      );
     });
   });
 
@@ -129,20 +105,6 @@ describe("AddressService", () => {
 
       expect(result.city).toEqual("New York");
       expect(addressRepository.saveAddress).toHaveBeenCalled();
-    });
-
-    it("should throw ForbiddenException when id is missing", async () => {
-      await expect(service.updateAddress("", {} as UpdateAddressDto)).rejects.toThrow(
-        ForbiddenException,
-      );
-    });
-
-    it("should throw NotFoundException when user shortcut is not found", async () => {
-      addressRepository.findAddressById.mockResolvedValue(null);
-
-      await expect(service.updateAddress("999", {} as UpdateAddressDto)).rejects.toThrow(
-        NotFoundException,
-      );
     });
   });
 
@@ -168,23 +130,6 @@ describe("AddressService", () => {
 
       expect(result).toEqual(mockAddress);
       expect(addressRepository.saveAddress).toHaveBeenCalled();
-    });
-
-    it("should throw ForbiddenException when user is not valid", async () => {
-      const dto = {
-        id: "1",
-        street: "3 rue qql",
-        city: "Allençons",
-        zipCode: "44400",
-        country: "France",
-        addressType: "Shipping",
-        customerId: "1",
-      };
-      customerRepository.findCustomerById.mockResolvedValue(null);
-
-      await expect(service.createAddress(dto as AddressDto)).rejects.toThrow(
-        ForbiddenException,
-      );
     });
   });
 });

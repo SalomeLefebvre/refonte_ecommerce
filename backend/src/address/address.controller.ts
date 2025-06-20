@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -25,7 +27,9 @@ export class AddressController {
    */
   @Get(":id")
   async getAddressById(@Param("id") id: string): Promise<AddressDto> {
-    return this._addressService.getAddressById(id);
+  const result = await this._addressService.getAddressById(id);
+  if (!result) throw new NotFoundException(`Address with id ${id} not found`);
+  return result;
   }
 
   /**
@@ -55,11 +59,12 @@ export class AddressController {
    */
   @Post()
   async createAddress(@Body() dto: AddressDto): Promise<AddressDto> {
-    const address = await this._addressService.createAddress(dto);
-    return {
-      ...address,
-      customerId: address.customer.id ?? dto.customerId,
-    };
+  const created = await this._addressService.createAddress(dto);
+  if (!created) throw new ForbiddenException("Customer is not valid");
+  return {
+    ...created,
+    customerId: created.customer.id ?? dto.customerId,
+  };
   }
 
   /**
@@ -68,10 +73,12 @@ export class AddressController {
    */
   @Patch(":id")
   async patchAddress(
-    @Param("id") id: string,
-    @Body() dto: UpdateAddressDto,
+  @Param("id") id: string,
+  @Body() dto: UpdateAddressDto,
   ): Promise<AddressDto> {
-    return this._addressService.updateAddress(id, dto);
+  const updated = await this._addressService.updateAddress(id, dto);
+  if (!updated) throw new NotFoundException(`Address with id ${id} not found`);
+  return updated;
   }
 
   /**
@@ -80,6 +87,7 @@ export class AddressController {
    */
   @Delete(":id")
   async deleteAddressById(@Param("id") id: string): Promise<void> {
-    return this._addressService.deleteAddressById(id);
+  const deleted = await this._addressService.deleteAddressById(id);
+  if (!deleted) throw new NotFoundException(`Address with id ${id} not found`);
   }
 }

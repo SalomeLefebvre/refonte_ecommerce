@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { AddressRepository } from "./repositories/address.repository";
 import { AddressEntity } from "./entities/address.entity";
 import { AddressDto } from "./dtos/address.dto";
@@ -24,12 +20,9 @@ export class AddressService {
    * Retrieves an address by its ID.
    * @param id - The ID of the address to retrieve
    */
-  async getAddressById(id: string): Promise<AddressDto> {
-    const address = await this._addressRepository.findAddressById(id);
-    if (!address)
-      throw new NotFoundException(`Address with id ${id} not found`);
-
-    return this.mapToDto(address);
+  async getAddressById(id: string): Promise<AddressDto | null> {
+  const address = await this._addressRepository.findAddressById(id);
+  return address ? this.mapToDto(address) : null;
   }
 
   /**
@@ -44,25 +37,23 @@ export class AddressService {
    * Deletes an address by its ID.
    * @param id - The ID of the address to delete
    */
-  async deleteAddressById(id: string): Promise<void> {
-    if (!id) throw new ForbiddenException("Address' id is requiered.");
-    const address = await this._addressRepository.findAddressById(id);
-    if (!address)
-      throw new NotFoundException(`Address with id ${id} not found`);
-    await this._addressRepository.deleteAddressById(id);
-  }
+  async deleteAddressById(id: string): Promise<boolean> {
+  const address = await this._addressRepository.findAddressById(id);
+  if (!address) return false;
+  await this._addressRepository.deleteAddressById(id);
+  return true;
+ }
 
   /**
    * Updates an existing address.
    * @param id - The ID of the address to update
    */
   async updateAddress(
-    id: string,
-    updates: UpdateAddressDto,
-  ): Promise<AddressDto> {
-    if (!id) throw new ForbiddenException("L'ID du address est requis.");
+  id: string,
+  updates: UpdateAddressDto,
+  ): Promise<AddressDto | null> {
     const address = await this._addressRepository.findAddressById(id);
-    if (!address) throw new NotFoundException(`Adress with id ${id} not found`);
+    if (!address) return null;
     const updated = Object.assign(address, updates);
     const saved = await this._addressRepository.saveAddress(updated);
     return this.mapToDto(saved);
@@ -89,21 +80,18 @@ export class AddressService {
    * @param dto - The AddressDto containing address details
    * @returns The created AddressEntity
    */
-  async createAddress(dto: AddressDto): Promise<AddressEntity> {
-    const customer = await this._customerRepository.findCustomerById(
-      dto.customerId,
-    );
-    if (!customer) throw new ForbiddenException("customer is not valid");
-
-    const address = {
-      id: dto.id,
-      street: dto.street,
-      city: dto.city,
-      zipCode: dto.zipCode,
-      country: dto.country,
-      addressType: dto.addressType,
-      customer: customer,
-    };
-    return this._addressRepository.saveAddress(address);
+  async createAddress(dto: AddressDto): Promise<AddressEntity | null> {
+  const customer = await this._customerRepository.findCustomerById(dto.customerId);
+  if (!customer) return null;
+  const address = {
+    id: dto.id,
+    street: dto.street,
+    city: dto.city,
+    zipCode: dto.zipCode,
+    country: dto.country,
+    addressType: dto.addressType,
+    customer,
+  };
+  return this._addressRepository.saveAddress(address);
   }
 }

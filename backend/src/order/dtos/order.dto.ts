@@ -1,30 +1,30 @@
-import { IsUUID, IsString, IsDateString, IsNumberString } from 'class-validator';
+import { IsUUID, IsString, IsDateString, IsNumberString } from "class-validator";
 
 export class OrderDto {
   @IsUUID()
-  id: string;
+    id: string;
 
   @IsDateString()
-  orderDate: string;
+    orderDate: string;
 
   @IsString()
-  status: string;
+    status: string;
 
   @IsUUID()
-  carrierId: string;
+    carrierId: string;
 
   @IsUUID()
-  paymentId: string;
+    paymentId: string;
 
   @IsNumberString()
-  orderTotal: string;
+    orderTotal: string;
 
   @IsUUID()
-  shippingAddressId: string;
+    shippingAddressId: string;
 
   @IsUUID()
-  billingAddressId: string;
+    billingAddressId: string;
 
   @IsUUID()
-  customerId: string;
+    customerId: string;
 }

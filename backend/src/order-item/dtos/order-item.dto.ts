@@ -1,24 +1,24 @@
-import { IsUUID, IsString, IsNumber } from 'class-validator';
+import { IsUUID, IsString, IsNumber } from "class-validator";
 
 export class OrderItemDto {
   @IsUUID()
-  id: string;
+    id: string;
 
   @IsUUID()
-  productId: string;
+    productId: string;
 
   @IsUUID()
-  carrierId: string;
+    carrierId: string;
 
   @IsNumber()
-  quantity: number;
+    quantity: number;
 
   @IsString()
-  unitPrice: string;
+    unitPrice: string;
 
   @IsString()
-  totalPrice: string;
+    totalPrice: string;
 
   @IsUUID()
-  orderId: string;
+    orderId: string;
 }

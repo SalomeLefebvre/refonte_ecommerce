@@ -135,7 +135,15 @@ describe("CustomerService", () => {
       customerRepository.saveCustomer.mockResolvedValue(updatedCustomer);
 
       const result = await service.updateCustomer("1", updates);
-      expect(result).toEqual(mockCustomerDto);
+      const expectedUpdatedCustomerDto: CustomerDto = {
+        id: "1",
+        name: "New Name",
+        email: "jane@example.com",
+        defaultShippingAddressId: "10",
+        defaultBillingAddressId: "11",
+      };
+
+      expect(result).toEqual(expectedUpdatedCustomerDto);
     });
 
     it("should return null if customer is not found", async () => {

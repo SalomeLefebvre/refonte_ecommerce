@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { DataSource, DeepPartial } from 'typeorm';
-import { OrderEntity } from '../entities/order.entity';
+import { Injectable } from "@nestjs/common";
+import { DataSource, DeepPartial } from "typeorm";
+import { OrderEntity } from "../entities/order.entity";
 
 @Injectable()
 export class OrderRepository {
@@ -22,10 +22,10 @@ export class OrderRepository {
     return this._repository.findOne({
       where: { id },
       relations: [
-        'customer',
-        'shippingAddress',
-        'billingAddress',
-        'items',
+        "customer",
+        "shippingAddress",
+        "billingAddress",
+        "items",
       ],
     });
   }
@@ -38,10 +38,10 @@ export class OrderRepository {
     return this._repository.find({
       where: { customer: { id: customerId } },
       relations: [
-        'customer',
-        'shippingAddress',
-        'billingAddress',
-        'items',
+        "customer",
+        "shippingAddress",
+        "billingAddress",
+        "items",
       ],
     });
   }

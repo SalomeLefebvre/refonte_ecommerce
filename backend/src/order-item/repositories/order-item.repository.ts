@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { DataSource, DeepPartial } from 'typeorm';
-import { OrderItemEntity } from '../entities/order-item.entity';
+import { Injectable } from "@nestjs/common";
+import { DataSource, DeepPartial } from "typeorm";
+import { OrderItemEntity } from "../entities/order-item.entity";
 
 @Injectable()
 export class OrderItemRepository {
@@ -21,7 +21,7 @@ export class OrderItemRepository {
   async findOrderItemById(id: string): Promise<OrderItemEntity | null> {
     return this._repository.findOne({
       where: { id },
-      relations: ['order'],
+      relations: ["order"],
     });
   }
 
@@ -32,7 +32,7 @@ export class OrderItemRepository {
   async findOrderItemByOrderId(orderId: string): Promise<OrderItemEntity[]> {
     return this._repository.find({
       where: { order: { id: orderId } },
-      relations: ['order'],
+      relations: ["order"],
     });
   }
 

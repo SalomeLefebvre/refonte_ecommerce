@@ -4,8 +4,9 @@ import { DataSource } from "typeorm";
 import { AddressEntity } from "./entities/address.entity";
 import { AddressController } from "./address.controller";
 import { AddressRepository } from "./repositories/address.repository";
-import { AddressService } from "./address.service";
 import { CustomerEntity } from "src/customer/entities/customer.entity";
+import { AddressService } from "./address.service";
+import { CustomerRepository } from "src/customer/repositories/customer.repository";
 
 @Module({
   imports: [TypeOrmModule.forFeature([AddressEntity, CustomerEntity])],
@@ -17,6 +18,7 @@ import { CustomerEntity } from "src/customer/entities/customer.entity";
       useFactory: (dataSource: DataSource) => new AddressRepository(dataSource),
       inject: [DataSource],
     },
+    CustomerRepository,
   ],
   exports: [AddressService],
 })

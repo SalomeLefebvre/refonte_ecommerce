@@ -7,6 +7,8 @@ import { CustomerService } from "./customer.service";
 import { CustomerRepository } from "./repositories/customer.repository";
 import { AddressEntity } from "src/address/entities/address.entity";
 import { OrderEntity } from "src/order/entities/order.entity";
+import { AddressRepository } from "src/address/repositories/address.repository";
+import { OrderRepository } from "src/order/repositories/order.repository";
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { OrderEntity } from "src/order/entities/order.entity";
         new CustomerRepository(dataSource),
       inject: [DataSource],
     },
+    AddressRepository,
+    OrderRepository,
   ],
   exports: [CustomerService],
 })

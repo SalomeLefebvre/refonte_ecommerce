@@ -27,9 +27,9 @@ export class AddressController {
    */
   @Get(":id")
   async getAddressById(@Param("id") id: string): Promise<AddressDto> {
-  const result = await this._addressService.getAddressById(id);
-  if (!result) throw new NotFoundException(`Address with id ${id} not found`);
-  return result;
+    const result = await this._addressService.getAddressById(id);
+    if (!result) throw new NotFoundException(`Address with id ${id} not found`);
+    return result;
   }
 
   /**
@@ -59,12 +59,12 @@ export class AddressController {
    */
   @Post()
   async createAddress(@Body() dto: AddressDto): Promise<AddressDto> {
-  const created = await this._addressService.createAddress(dto);
-  if (!created) throw new ForbiddenException("Customer is not valid");
-  return {
-    ...created,
-    customerId: created.customer.id ?? dto.customerId,
-  };
+    const created = await this._addressService.createAddress(dto);
+    if (!created) throw new ForbiddenException("Customer is not valid");
+    return {
+      ...created,
+      customerId: created.customer.id ?? dto.customerId,
+    };
   }
 
   /**
@@ -76,9 +76,9 @@ export class AddressController {
   @Param("id") id: string,
   @Body() dto: UpdateAddressDto,
   ): Promise<AddressDto> {
-  const updated = await this._addressService.updateAddress(id, dto);
-  if (!updated) throw new NotFoundException(`Address with id ${id} not found`);
-  return updated;
+    const updated = await this._addressService.updateAddress(id, dto);
+    if (!updated) throw new NotFoundException(`Address with id ${id} not found`);
+    return updated;
   }
 
   /**
@@ -87,7 +87,7 @@ export class AddressController {
    */
   @Delete(":id")
   async deleteAddressById(@Param("id") id: string): Promise<void> {
-  const deleted = await this._addressService.deleteAddressById(id);
-  if (!deleted) throw new NotFoundException(`Address with id ${id} not found`);
+    const deleted = await this._addressService.deleteAddressById(id);
+    if (!deleted) throw new NotFoundException(`Address with id ${id} not found`);
   }
 }

@@ -6,6 +6,7 @@ import { OrderItemController } from "./order-item.controller";
 import { OrderItemService } from "./order-item.service";
 import { OrderItemRepository } from "./repositories/order-item.repository";
 import { OrderEntity } from "src/order/entities/order.entity";
+import { OrderRepository } from "src/order/repositories/order.repository";
 
 @Module({
   imports: [TypeOrmModule.forFeature([OrderItemEntity, OrderEntity])],
@@ -18,6 +19,7 @@ import { OrderEntity } from "src/order/entities/order.entity";
         new OrderItemRepository(dataSource),
       inject: [DataSource],
     },
+    OrderRepository,
   ],
   exports: [OrderItemService],
 })

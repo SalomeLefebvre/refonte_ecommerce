@@ -77,6 +77,15 @@ describe("AddressService", () => {
       });
       expect(addressRepository.findAddressById).toHaveBeenCalledWith("1");
     });
+
+    it("should return null when address is not found", async () => {
+      addressRepository.findAddressById.mockResolvedValue(null);
+
+      const result = await service.getAddressById("999");
+
+      expect(result).toBeNull();
+      expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
+    });
   });
 
   describe("deleteUserShortcutById", () => {
@@ -87,6 +96,16 @@ describe("AddressService", () => {
 
       await service.deleteAddressById("1");
       expect(addressRepository.deleteAddressById).toHaveBeenCalledWith("1");
+    });
+
+    it("should return false when address is not found", async () => {
+      addressRepository.findAddressById.mockResolvedValue(null);
+
+      const result = await service.deleteAddressById("999");
+
+      expect(result).toBe(false);
+      expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
+      expect(addressRepository.deleteAddressById).not.toHaveBeenCalled();
     });
   });
 
@@ -105,6 +124,17 @@ describe("AddressService", () => {
 
       expect(result.city).toEqual("New York");
       expect(addressRepository.saveAddress).toHaveBeenCalled();
+    });
+
+    it("should return null when address is not found", async () => {
+      addressRepository.findAddressById.mockResolvedValue(null);
+
+      const updates = { city: "New York" } as UpdateAddressDto;
+      const result = await service.updateAddress("999", updates);
+
+      expect(result).toBeNull();
+      expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
+      expect(addressRepository.saveAddress).not.toHaveBeenCalled();
     });
   });
 
@@ -130,6 +160,26 @@ describe("AddressService", () => {
 
       expect(result).toEqual(mockAddress);
       expect(addressRepository.saveAddress).toHaveBeenCalled();
+    });
+
+    it("should return null when customer is not found", async () => {
+      const dto: AddressDto = {
+        id: "1",
+        street: "3 rue qql",
+        city: "Allençons",
+        zipCode: "44400",
+        country: "France",
+        addressType: "Shipping",
+        customerId: "999",
+      };
+
+      customerRepository.findCustomerById.mockResolvedValue(null);
+
+      const result = await service.createAddress(dto);
+
+      expect(result).toBeNull();
+      expect(customerRepository.findCustomerById).toHaveBeenCalledWith("999");
+      expect(addressRepository.saveAddress).not.toHaveBeenCalled();
     });
   });
 });

@@ -21,8 +21,8 @@ export class AddressService {
    * @param id - The ID of the address to retrieve
    */
   async getAddressById(id: string): Promise<AddressDto | null> {
-  const address = await this._addressRepository.findAddressById(id);
-  return address ? this.mapToDto(address) : null;
+    const address = await this._addressRepository.findAddressById(id);
+    return address ? this.mapToDto(address) : null;
   }
 
   /**
@@ -38,19 +38,19 @@ export class AddressService {
    * @param id - The ID of the address to delete
    */
   async deleteAddressById(id: string): Promise<boolean> {
-  const address = await this._addressRepository.findAddressById(id);
-  if (!address) return false;
-  await this._addressRepository.deleteAddressById(id);
-  return true;
- }
+    const address = await this._addressRepository.findAddressById(id);
+    if (!address) return false;
+    await this._addressRepository.deleteAddressById(id);
+    return true;
+  }
 
   /**
    * Updates an existing address.
    * @param id - The ID of the address to update
    */
   async updateAddress(
-  id: string,
-  updates: UpdateAddressDto,
+    id: string,
+    updates: UpdateAddressDto,
   ): Promise<AddressDto | null> {
     const address = await this._addressRepository.findAddressById(id);
     if (!address) return null;
@@ -81,17 +81,17 @@ export class AddressService {
    * @returns The created AddressEntity
    */
   async createAddress(dto: AddressDto): Promise<AddressEntity | null> {
-  const customer = await this._customerRepository.findCustomerById(dto.customerId);
-  if (!customer) return null;
-  const address = {
-    id: dto.id,
-    street: dto.street,
-    city: dto.city,
-    zipCode: dto.zipCode,
-    country: dto.country,
-    addressType: dto.addressType,
-    customer,
-  };
-  return this._addressRepository.saveAddress(address);
+    const customer = await this._customerRepository.findCustomerById(dto.customerId);
+    if (!customer) return null;
+    const address = {
+      id: dto.id,
+      street: dto.street,
+      city: dto.city,
+      zipCode: dto.zipCode,
+      country: dto.country,
+      addressType: dto.addressType,
+      customer,
+    };
+    return this._addressRepository.saveAddress(address);
   }
 }

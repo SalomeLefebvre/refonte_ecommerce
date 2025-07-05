@@ -29,8 +29,9 @@ export class AddressService {
    * Retrieves all addresses associated with a specific customer ID.
    * @param customerId - The ID of the customer whose addresses are to be retrieved
    */
-  async getAddresssByCustomerId(customerId: string): Promise<AddressEntity[]> {
-    return this._addressRepository.findAddressByCustomer(customerId);
+  async getAddressByCustomerId(customerId: string): Promise<AddressDto[]> {
+    const adresses = await this._addressRepository.findAddressByCustomer(customerId);
+    return adresses.map((address) => this.mapToDto(address));
   }
 
   /**
@@ -80,7 +81,7 @@ export class AddressService {
    * @param dto - The AddressDto containing address details
    * @returns The created AddressEntity
    */
-  async createAddress(dto: AddressDto): Promise<AddressEntity | null> {
+  async createAddress(dto: AddressDto): Promise<AddressDto | null> {
     const customer = await this._customerRepository.findCustomerById(dto.customerId);
     if (!customer) return null;
     const address = {
@@ -92,6 +93,6 @@ export class AddressService {
       addressType: dto.addressType,
       customer,
     };
-    return this._addressRepository.saveAddress(address);
+    return this.mapToDto(await this._addressRepository.saveAddress(address));
   }
 }

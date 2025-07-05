@@ -1,5 +1,4 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { NotFoundException, ForbiddenException } from "@nestjs/common";
 import { AddressService } from "./address.service";
 import { AddressRepository } from "./repositories/address.repository";
 import { AddressEntity } from "./entities/address.entity";
@@ -109,6 +108,61 @@ describe("AddressService", () => {
     });
   });
 
+  describe("getAddresssByCustomerId", () => {
+    it("should return addresses for a given customer", async () => {
+      addressRepository.findAddressByCustomer.mockResolvedValue([
+      mockAddress as AddressEntity,
+      ]);
+
+      const result = await service.getAddressByCustomerId("1");
+
+      expect(result).toEqual([
+        {
+          id: "1",
+          street: "2 rue qql",
+          city: "Bordeaux",
+          zipCode: "33800",
+          country: "France",
+          addressType: "Shipping",
+          customerId: "1",
+        },
+      ]);
+      expect(addressRepository.findAddressByCustomer).toHaveBeenCalledWith("1");
+    });
+  });
+
+    describe("createAddress", () => {
+    it("should create an address", async () => {
+      const dto = {
+        id: "1",
+        street: "2 rue qql",
+        city: "Bordeaux",
+        zipCode: "33800",
+        country: "France",
+        addressType: "Shipping",
+        customerId: "1",
+      };
+      customerRepository.findCustomerById.mockResolvedValue(
+        mockCustomer as CustomerEntity,
+      );
+      addressRepository.saveAddress.mockResolvedValue(
+        mockAddress as AddressEntity,
+      );
+
+      const result = await service.createAddress(dto as AddressDto);
+
+      expect(result).toEqual({
+        id: "1",
+        street: "2 rue qql",
+        city: "Bordeaux",
+        zipCode: "33800",
+        country: "France",
+        addressType: "Shipping",
+        customerId: "1",
+      });
+      expect(addressRepository.saveAddress).toHaveBeenCalled();
+    });
+
   describe("updateAddress", () => {
     it("should update a user shortcut when found", async () => {
       const updates = { city: "New York" };
@@ -137,30 +191,6 @@ describe("AddressService", () => {
       expect(addressRepository.saveAddress).not.toHaveBeenCalled();
     });
   });
-
-  describe("createAddress", () => {
-    it("should create an address", async () => {
-      const dto = {
-        id: "1",
-        street: "3 rue qql",
-        city: "Allençons",
-        zipCode: "44400",
-        country: "France",
-        addressType: "Shipping",
-        customerId: "1",
-      };
-      customerRepository.findCustomerById.mockResolvedValue(
-        mockCustomer as CustomerEntity,
-      );
-      addressRepository.saveAddress.mockResolvedValue(
-        mockAddress as AddressEntity,
-      );
-
-      const result = await service.createAddress(dto as AddressDto);
-
-      expect(result).toEqual(mockAddress);
-      expect(addressRepository.saveAddress).toHaveBeenCalled();
-    });
 
     it("should return null when customer is not found", async () => {
       const dto: AddressDto = {

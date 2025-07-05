@@ -1,11 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { AddressController } from "./address.controller";
 import { AddressService } from "./address.service";
-import { NotFoundException, ForbiddenException } from "@nestjs/common";
+import { NotFoundException } from "@nestjs/common";
 import { AddressDto } from "./dtos/address.dto";
 import { UpdateAddressDto } from "./dtos/update-address.dto";
-import { CustomerEntity } from "src/customer/entities/customer.entity";
-import { AddressEntity } from "./entities/address.entity";
 
 describe("AddressController", () => {
   let controller: AddressController;
@@ -34,7 +32,7 @@ describe("AddressController", () => {
           provide: AddressService,
           useValue: {
             getAddressById: jest.fn(),
-            getAddresssByCustomerId: jest.fn(),
+            getAddressByCustomerId: jest.fn(),
             createAddress: jest.fn(),
             updateAddress: jest.fn(),
             deleteAddressById: jest.fn(),
@@ -62,21 +60,18 @@ describe("AddressController", () => {
     });
   });
 
-  describe("getAddresByCustomerId", () => {
+  describe("getAddressByCustomerId", () => {
     it("should return an array of address DTOs", async () => {
-      const mockEntity = {
-        ...mockAddress,
-        customer: {
-          id: "1",
-          name: "John Doe",
-          email: "john@example.com",
-          defaultShippingAddress: null,
-          defaultBillingAddress: null,
-          addresses: [],
-          orders: [],
-        },
+      const mockAddress = {
+        id: "1",
+        street: "2 rue qql",
+        city: "Bordeaux",
+        zipCode: "33800",
+        country: "France",
+        addressType: "Shipping",
+        customerId: "1",
       };
-      service.getAddresssByCustomerId.mockResolvedValue([mockEntity]);
+      service.getAddressByCustomerId.mockResolvedValue([mockAddress]);
 
       const result = await controller.getAddresByCustomerId("1");
       expect(result).toEqual([mockAddress]);
@@ -85,14 +80,14 @@ describe("AddressController", () => {
 
   describe("createAddress", () => {
     it("should return created address if valid", async () => {
-      const createdWithCustomer: AddressEntity = {
+      const createdWithCustomer: AddressDto = {
         id: "1",
         street: "2 rue qql",
         city: "Bordeaux",
         zipCode: "33800",
         country: "France",
         addressType: "Shipping",
-        customer: { id: "1" } as CustomerEntity,
+        customerId: "1",
       };
 
       jest.spyOn(service, "createAddress").mockResolvedValue(createdWithCustomer);
@@ -107,18 +102,13 @@ describe("AddressController", () => {
         customerId: "1",
       });
 
-      const expectedReturn = {
-        ...createdWithCustomer,
-        customerId: createdWithCustomer.customer.id,
-      };
-
-      expect(result).toEqual(expectedReturn);
+      expect(result).toEqual(createdWithCustomer);
     });
 
-    it("should throw ForbiddenException if customer is not valid", async () => {
+    it("should throw NotFoundException if customer is not valid", async () => {
       service.createAddress.mockResolvedValue(null);
       await expect(controller.createAddress(mockAddress)).rejects.toThrow(
-        ForbiddenException,
+        NotFoundException,
       );
     });
   });

@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -40,17 +39,7 @@ export class AddressController {
   async getAddresByCustomerId(
     @Param("customerId") customerId: string,
   ): Promise<AddressDto[]> {
-    const address =
-      await this._addressService.getAddresssByCustomerId(customerId);
-    return address.map((address) => ({
-      id: address.id,
-      street: address.street,
-      city: address.city,
-      zipCode: address.zipCode,
-      country: address.country,
-      addressType: address.addressType,
-      customerId: address.customer.id,
-    }));
+    return await this._addressService.getAddressByCustomerId(customerId);
   }
 
   /**
@@ -59,12 +48,9 @@ export class AddressController {
    */
   @Post()
   async createAddress(@Body() dto: AddressDto): Promise<AddressDto> {
-    const created = await this._addressService.createAddress(dto);
-    if (!created) throw new ForbiddenException("Customer is not valid");
-    return {
-      ...created,
-      customerId: created.customer.id ?? dto.customerId,
-    };
+    const created =  await this._addressService.createAddress(dto);
+    if (!created) throw new NotFoundException(`Client does not exist`);
+    return created;
   }
 
   /**

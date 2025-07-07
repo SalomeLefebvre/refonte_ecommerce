@@ -131,7 +131,7 @@ describe("AddressService", () => {
     });
   });
 
-    describe("createAddress", () => {
+  describe("createAddress", () => {
     it("should create an address", async () => {
       const dto = {
         id: "1",
@@ -163,34 +163,34 @@ describe("AddressService", () => {
       expect(addressRepository.saveAddress).toHaveBeenCalled();
     });
 
-  describe("updateAddress", () => {
-    it("should update a user shortcut when found", async () => {
-      const updates = { city: "New York" };
-      addressRepository.findAddressById.mockResolvedValue(
+    describe("updateAddress", () => {
+      it("should update a user shortcut when found", async () => {
+        const updates = { city: "New York" };
+        addressRepository.findAddressById.mockResolvedValue(
         mockAddress as AddressEntity,
-      );
-      addressRepository.saveAddress.mockResolvedValue({
-        ...mockAddress,
-        ...updates,
-      } as AddressEntity);
+        );
+        addressRepository.saveAddress.mockResolvedValue({
+          ...mockAddress,
+          ...updates,
+        } as AddressEntity);
 
-      const result = await service.updateAddress("1", updates as UpdateAddressDto);
+        const result = await service.updateAddress("1", updates as UpdateAddressDto);
 
-      expect(result.city).toEqual("New York");
-      expect(addressRepository.saveAddress).toHaveBeenCalled();
+        expect(result.city).toEqual("New York");
+        expect(addressRepository.saveAddress).toHaveBeenCalled();
+      });
+
+      it("should return null when address is not found", async () => {
+        addressRepository.findAddressById.mockResolvedValue(null);
+
+        const updates = { city: "New York" } as UpdateAddressDto;
+        const result = await service.updateAddress("999", updates);
+
+        expect(result).toBeNull();
+        expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
+        expect(addressRepository.saveAddress).not.toHaveBeenCalled();
+      });
     });
-
-    it("should return null when address is not found", async () => {
-      addressRepository.findAddressById.mockResolvedValue(null);
-
-      const updates = { city: "New York" } as UpdateAddressDto;
-      const result = await service.updateAddress("999", updates);
-
-      expect(result).toBeNull();
-      expect(addressRepository.findAddressById).toHaveBeenCalledWith("999");
-      expect(addressRepository.saveAddress).not.toHaveBeenCalled();
-    });
-  });
 
     it("should return null when customer is not found", async () => {
       const dto: AddressDto = {
